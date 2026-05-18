@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bizprac - Trung tâm mô phỏng thực hành kinh doanh</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #667085;
+        --line: #e7eaf0;
+        --accent: #f05f3b;
+        --accent-dark: #d94e2d;
+        --navy: #101a2f;
+        --surface: #ffffff;
+        --soft: #f6f8fb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--soft);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .hero {
+        min-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        background:
+          linear-gradient(90deg, rgba(8, 15, 30, 0.94) 0%, rgba(8, 15, 30, 0.78) 48%, rgba(8, 15, 30, 0.22) 100%),
+          url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=2200&q=85")
+            center / cover;
+      }
+
+      .nav {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 24px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 22px;
+        font-weight: 850;
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .nav-link,
+      .button {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        border-radius: 8px;
+        font-weight: 760;
+      }
+
+      .nav-link {
+        padding: 0 15px;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-link.primary,
+      .button.primary {
+        border-color: transparent;
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .nav-link.primary:hover,
+      .button.primary:hover {
+        background: var(--accent-dark);
+      }
+
+      .hero-inner {
+        width: min(1160px, calc(100% - 40px));
+        margin: auto;
+        padding: 64px 0 92px;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        margin: 0 0 18px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.13);
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: clamp(44px, 6.8vw, 82px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 650px;
+        margin: 24px 0 0;
+        color: rgba(255, 255, 255, 0.84);
+        font-size: clamp(17px, 2vw, 21px);
+        line-height: 1.58;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .button {
+        padding: 0 18px;
+      }
+
+      .button.secondary {
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .wrap {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .section-head {
+        max-width: 760px;
+        margin-bottom: 30px;
+      }
+
+      .kicker {
+        margin: 0 0 10px;
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 850;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 44px);
+        line-height: 1.08;
+        letter-spacing: 0;
+      }
+
+      .section-copy {
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.65;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        min-height: 190px;
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: 0 14px 38px rgba(18, 32, 56, 0.06);
+      }
+
+      .card i {
+        font-size: 28px;
+        color: var(--accent);
+      }
+
+      .card h3 {
+        margin: 16px 0 9px;
+        font-size: 20px;
+        letter-spacing: 0;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.58;
+      }
+
+      .dark {
+        color: #fff;
+        background: var(--navy);
+      }
+
+      .dark .section-copy,
+      .dark .card p {
+        color: rgba(255, 255, 255, 0.74);
+      }
+
+      .dark .card {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: none;
+      }
+
+      .plans {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .plan {
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .plan.featured {
+        border-color: rgba(240, 95, 59, 0.46);
+        box-shadow: 0 18px 44px rgba(240, 95, 59, 0.12);
+      }
+
+      .plan-name {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 850;
+      }
+
+      .price {
+        margin: 14px 0 18px;
+        font-size: 30px;
+        font-weight: 900;
+      }
+
+      .plan ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 10px;
+        color: var(--muted);
+      }
+
+      .plan li {
+        display: flex;
+        gap: 9px;
+        line-height: 1.45;
+      }
+
+      .plan li i {
+        color: var(--accent);
+      }
+
+      .cta {
+        padding: 64px 0;
+        color: #fff;
+        background:
+          linear-gradient(90deg, rgba(16, 26, 47, 0.96), rgba(16, 26, 47, 0.76)),
+          url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1800&q=85")
+            center / cover;
+      }
+
+      .cta-inner {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 28px;
+      }
+
+      .cta h2 {
+        max-width: 720px;
+      }
+
+      @media (max-width: 820px) {
+        .nav {
+          width: min(100% - 28px, 1160px);
+        }
+
+        .nav-link:not(.primary) {
+          display: none;
+        }
+
+        .hero-inner,
+        .wrap,
+        .cta-inner {
+          width: min(100% - 28px, 1160px);
+        }
+
+        .grid-3,
+        .grid-2,
+        .plans {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="hero">
+      <nav class="nav" aria-label="Điều hướng chính">
+        <a class="brand" href="index.html" aria-label="Trang chủ Bizprac">
+          <span class="brand-mark"><i class="bi bi-buildings"></i></span>
+          <span>Bizprac</span>
+        </a>
+        <div class="nav-actions">
+          <a class="nav-link" href="simulations.html"><i class="bi bi-grid-3x3-gap"></i>Mô phỏng</a>
+          <a class="nav-link" href="features.html"><i class="bi bi-stars"></i>Tính năng</a>
+          <a class="nav-link" href="pricing.html"><i class="bi bi-tags"></i>Bảng giá</a>
+          <a class="nav-link" href="docs.html"><i class="bi bi-file-earmark-text"></i>Tài liệu</a>
+          <a class="nav-link primary" href="signin.html"><i class="bi bi-box-arrow-in-right"></i>Đăng nhập</a>
+        </div>
+      </nav>
+
+      <section class="hero-inner">
+        <p class="eyebrow">Không gian ảo cho những trải nghiệm thật</p>
+        <h1>Trung tâm mô phỏng thực hành kinh doanh.</h1>
+        <p class="lead">
+          Bizprac giúp sinh viên thử vận hành doanh nghiệp, ra quyết định và học từ kết quả trước khi bước
+          vào thị trường thật.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="simulation-demo.html?model=cafe"><i class="bi bi-play-circle"></i>Trải nghiệm ngay</a>
+          <a class="button secondary" href="simulations.html"><i class="bi bi-grid-3x3-gap"></i>Khám phá mô hình</a>
+        </div>
+      </section>
+    </main>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="kicker">Vấn đề</p>
+          <h2>Thu hẹp khoảng cách giữa lý thuyết và thực tế.</h2>
+          <p class="section-copy">
+            Sinh viên cần một môi trường an toàn để thử sai, giảng viên cần công cụ thực hành, còn doanh
+            nghiệp cần nhân lực sẵn sàng làm việc.
+          </p>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <i class="bi bi-mortarboard"></i>
+            <h3>Sinh viên</h3>
+            <p>Thực hành tài chính, marketing, nhân sự và vận hành qua tình huống mô phỏng.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-easel"></i>
+            <h3>Nhà trường</h3>
+            <p>Đưa trải nghiệm doanh nghiệp vào lớp học mà không cần thay đổi toàn bộ chương trình.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-briefcase"></i>
+            <h3>Doanh nghiệp</h3>
+            <p>Tham gia xây dựng tình huống thực tế và đào tạo kỹ năng cho nhân sự nội bộ.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="models">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="kicker">Mô phỏng</p>
+          <h2>Học bằng vai trò, quy trình và dữ liệu.</h2>
+          <p class="section-copy">
+            Các mô hình được thiết kế để người học hiểu cách doanh nghiệp vận hành từ từng phòng ban đến
+            toàn bộ chuỗi hoạt động.
+          </p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <i class="bi bi-cup-hot"></i>
+            <h3>Mô hình quán cà phê</h3>
+            <p>Order, pha chế, thu ngân, tồn kho, phân ca và xử lý tình huống dịch vụ.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-box-seam"></i>
+            <h3>Doanh nghiệp sản xuất</h3>
+            <p>Lập kế hoạch sản xuất, quản lý nguyên vật liệu, kiểm định, kho và báo cáo vận hành.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-megaphone"></i>
+            <h3>Phòng ban kinh doanh</h3>
+            <p>Marketing, bán hàng, CRM, tài chính, kế toán, nhân sự và chiến lược.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-bar-chart-line"></i>
+            <h3>Báo cáo đánh giá</h3>
+            <p>Theo dõi tiến độ, điểm số, KPI và gợi ý cải thiện dựa trên dữ liệu tương tác.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="kicker">Gói dịch vụ</p>
+          <h2>Linh hoạt cho cá nhân, lớp học và doanh nghiệp.</h2>
+        </div>
+        <div class="plans">
+          <article class="plan">
+            <p class="plan-name">Free</p>
+            <p class="price">0đ</p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i>Trải nghiệm một mô hình cơ bản</li>
+              <li><i class="bi bi-check-circle"></i>Hướng dẫn từng bước</li>
+              <li><i class="bi bi-check-circle"></i>Báo cáo vận hành cơ bản</li>
+            </ul>
+          </article>
+          <article class="plan featured">
+            <p class="plan-name">Premium cá nhân</p>
+            <p class="price">99.000đ+</p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i>Mở khóa mô phỏng nâng cao</li>
+              <li><i class="bi bi-check-circle"></i>Đánh giá năng lực cá nhân</li>
+              <li><i class="bi bi-check-circle"></i>Gợi ý lộ trình cải thiện</li>
+            </ul>
+          </article>
+          <article class="plan">
+            <p class="plan-name">Trường học / DN</p>
+            <p class="price">Theo gói</p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i>Quản trị lớp học và người dùng</li>
+              <li><i class="bi bi-check-circle"></i>Báo cáo theo lớp, nhóm, tổ chức</li>
+              <li><i class="bi bi-check-circle"></i>Tùy chỉnh kịch bản mô phỏng</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="kicker">Lợi thế</p>
+          <h2>Thiết kế cho sinh viên Việt Nam.</h2>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <i class="bi bi-translate"></i>
+            <h3>Tiếng Việt, dễ tiếp cận</h3>
+            <p>Nội dung và tình huống phù hợp bối cảnh học tập trong nước.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-controller"></i>
+            <h3>Game hóa trải nghiệm</h3>
+            <p>Học qua vai trò, nhiệm vụ, điểm số và phản hồi sau từng quyết định.</p>
+          </article>
+          <article class="card">
+            <i class="bi bi-people"></i>
+            <h3>Học nhóm như doanh nghiệp thật</h3>
+            <p>Phối hợp theo phòng ban để hiểu mối liên hệ giữa các quyết định.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-inner">
+        <h2>Sẵn sàng thử một môi trường kinh doanh ảo trước khi ra thị trường thật?</h2>
+        <a class="button primary" href="simulation-demo.html?model=cafe"><i class="bi bi-play-circle"></i>Thử mô phỏng demo</a>
+      </div>
+    </section>
+  </body>
+</html>

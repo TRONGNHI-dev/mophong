@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mô Phỏng Vận Hành - Bizprac</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="./assets/images/favicon_io/site.webmanifest">
+</head>
+
+<body>
+  <div id="overlay" class="overlay"></div>
+  <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
+    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2">
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
+    <div class="ms-auto d-flex gap-2">
+      <button class="btn btn-outline-secondary btn-sm">Đồng bộ dữ liệu</button>
+      <button class="btn btn-primary btn-sm">Mở ca mô phỏng</button>
+    </div>
+  </nav>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="logo-area">
+      <a href="index.html" class="d-inline-flex">
+        <img src="./assets/images/logo-icon.svg" alt="" width="24">
+        <span class="logo-text ms-2"><img src="./assets/images/logo.svg" alt=""></span>
+      </a>
+    </div>
+    <ul class="nav flex-column">
+      <li class="px-4 py-2"><small class="nav-text">Bizprac</small></li>
+      <li><a class="nav-link" href="index.html"><i class="ti ti-home"></i><span class="nav-text">Trang chủ</span></a></li>
+      <li><a class="nav-link active" href="inventory.html"><i class="ti ti-box-seam"></i><span class="nav-text">Mô phỏng vận hành</span></a></li>
+      <li><a class="nav-link" href="reports.html"><i class="ti ti-chart-bar"></i><span class="nav-text">Báo cáo năng lực</span></a></li>
+      <li><a class="nav-link" href="docs.html"><i class="ti ti-file-text"></i><span class="nav-text">Hồ sơ dự án</span></a></li>
+    </ul>
+  </aside>
+
+  <main id="content" class="content py-10">
+    <div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div>
+              <h1 class="fs-3 mb-1">Trung tâm điều phối mô phỏng vận hành</h1>
+              <p class="mb-0 text-secondary">Admin theo dõi và điều khiển các mô hình quán cà phê, sản xuất và phòng ban trong một màn hình thao tác trực quan.</p>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="badge bg-success-subtle text-success border border-success-subtle p-2">Hệ thống ổn định</span>
+              <button id="active-sessions-btn" type="button" class="badge bg-primary-subtle text-primary border border-primary-subtle p-2 border-0" style="cursor:pointer">24 phiên đang chạy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <p class="text-secondary small mb-2">Ca đang hoạt động</p>
+              <h3 class="mb-1">12 quán / 8 xưởng</h3>
+              <p class="mb-0 small text-secondary">Phân bổ theo mô hình và lớp học</p>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-3 detail-button" data-detail-key="active-shifts">Xem chi tiết</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <p class="text-secondary small mb-2">Cảnh báo tồn kho</p>
+              <h3 class="mb-1">07 mục</h3>
+              <p class="mb-0 small text-warning">3 mục cần xử lý ngay</p>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-3 detail-button" data-detail-key="stock-inventory">Xem chi tiết</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <p class="text-secondary small mb-2">Tỷ lệ hoàn thành</p>
+              <h3 class="mb-1">91%</h3>
+              <p class="mb-0 small text-success">Nhóm mô phỏng cơ bản đạt tốt</p>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-3 detail-button" data-detail-key="completion-rate">Xem chi tiết</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <p class="text-secondary small mb-2">Nhóm cần hỗ trợ</p>
+              <h3 class="mb-1">04 nhóm</h3>
+              <p class="mb-0 small text-danger">Lỗi thao tác và chậm tiến độ</p>
+              <button type="button" class="btn btn-sm btn-outline-primary mt-3 detail-button" data-detail-key="support-groups">Xem chi tiết</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-lg-7">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white px-4 py-3 d-flex justify-content-between align-items-center">
+              <h2 class="h5 mb-0">Mô phỏng quán cà phê</h2>
+              <span class="badge bg-warning-subtle text-warning">Giờ cao điểm</span>
+            </div>
+            <div class="card-body p-4">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Hàng chờ order</p>
+                    <h3 class="mb-2">18 đơn</h3>
+                    <p class="small text-secondary mb-3">2 đơn có ghi chú đặc biệt, 1 khách đang chờ phản hồi.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Nhận đơn mới</button>
+                      <button class="btn btn-outline-secondary btn-sm">Xem quầy phục vụ</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Trạng thái pha chế</p>
+                    <h3 class="mb-2">12 món đang làm</h3>
+                    <p class="small text-secondary mb-3">Thiếu 1 nguyên liệu topping, 3 món sắp trễ SLA.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Điều phối pha chế</button>
+                      <button class="btn btn-outline-secondary btn-sm">Cấp thêm nguyên liệu</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Thu ngân</p>
+                    <h3 class="mb-2">7 giao dịch chờ xử lý</h3>
+                    <p class="small text-secondary mb-3">Có 2 đơn cần kiểm tra ví điện tử và 1 yêu cầu hủy món.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Mở POS mô phỏng</button>
+                      <button class="btn btn-outline-secondary btn-sm">Xác nhận thanh toán</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Nhân sự ca làm</p>
+                    <h3 class="mb-2">6/8 nhân sự</h3>
+                    <p class="small text-secondary mb-3">Thiếu 1 nhân sự phục vụ, 1 nhân sự pha chế vào trễ.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Phân ca lại</button>
+                      <button class="btn btn-outline-secondary btn-sm">Đánh giá hiệu suất</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white px-4 py-3">
+              <h2 class="h5 mb-0">Bảng lệnh admin</h2>
+            </div>
+            <div class="card-body p-4">
+              <div class="d-grid gap-3">
+                <button class="btn btn-primary">Khởi tạo tình huống khách phàn nàn</button>
+                <button class="btn btn-outline-secondary">Tăng độ khó giờ cao điểm</button>
+                <button class="btn btn-outline-secondary">Gửi cảnh báo thiếu nguyên liệu</button>
+                <button class="btn btn-outline-secondary">Tạm dừng ca để hướng dẫn</button>
+              </div>
+              <div class="border rounded p-3 mt-4">
+                <p class="small text-secondary mb-2">Nhận xét nhanh</p>
+                <p class="mb-0">Nhóm Quản trị K15 xử lý order tốt nhưng còn chậm trong bước phối hợp thu ngân và pha chế.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-lg-7">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white px-4 py-3 d-flex justify-content-between align-items-center">
+              <h2 class="h5 mb-0">Mô phỏng doanh nghiệp sản xuất</h2>
+              <span class="badge bg-danger-subtle text-danger">1 phân xưởng đang chậm</span>
+            </div>
+            <div class="card-body p-4">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Lệnh sản xuất</p>
+                    <h3 class="mb-2">08 lệnh mở</h3>
+                    <p class="small text-secondary mb-3">2 lệnh chờ vật tư, 1 lệnh vượt định mức chi phí.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Mở kế hoạch sản xuất</button>
+                      <button class="btn btn-outline-secondary btn-sm">Phân bổ nguồn lực</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Chuỗi cung ứng</p>
+                    <h3 class="mb-2">5 đơn mua hàng</h3>
+                    <p class="small text-secondary mb-3">1 nhà cung cấp giao trễ, 2 lô đang chờ xác nhận.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Theo dõi logistics</button>
+                      <button class="btn btn-outline-secondary btn-sm">Dự báo nhu cầu vật tư</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">Kiểm định chất lượng</p>
+                    <h3 class="mb-2">14 lỗi phát sinh</h3>
+                    <p class="small text-secondary mb-3">4 lỗi nhẹ, 7 lỗi nặng, 3 lỗi nghiêm trọng cần xử lý.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Mở trung tâm QC</button>
+                      <button class="btn btn-outline-secondary btn-sm">Phân tích nguyên nhân lỗi</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border rounded p-3 h-100">
+                    <p class="small text-secondary mb-2">KPI máy móc</p>
+                    <h3 class="mb-2">87% hiệu suất</h3>
+                    <p class="small text-secondary mb-3">1 máy giảm năng suất, thời gian chờ tăng 9%.</p>
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-primary btn-sm">Giám sát máy</button>
+                      <button class="btn btn-outline-secondary btn-sm">Tối ưu công suất</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white px-4 py-3">
+              <h2 class="h5 mb-0">Theo dõi kho và trạng thái</h2>
+            </div>
+            <div class="card-body p-4">
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Vật tư</th>
+                      <th>Tồn</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Thép tấm ST-02</td>
+                      <td>1.2 tấn</td>
+                      <td><span class="badge bg-danger-subtle text-danger">Thiếu</span></td>
+                    </tr>
+                    <tr>
+                      <td>Hộp đóng gói A</td>
+                      <td>540 bộ</td>
+                      <td><span class="badge bg-success-subtle text-success">Ổn định</span></td>
+                    </tr>
+                    <tr>
+                      <td>Linh kiện C-15</td>
+                      <td>120 bộ</td>
+                      <td><span class="badge bg-warning-subtle text-warning">Sắp hết</span></td>
+                    </tr>
+                    <tr>
+                      <td>Thành phẩm TP-18</td>
+                      <td>860 đơn vị</td>
+                      <td><span class="badge bg-primary-subtle text-primary">Sẵn sàng giao</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="d-grid gap-2 mt-4">
+                <button class="btn btn-outline-secondary">Nhập thêm vật tư</button>
+                <button class="btn btn-outline-secondary">Khóa lệnh lỗi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Module phòng ban</h2>
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary">Marketing số</button>
+                <button class="btn btn-outline-primary">CRM và bán hàng</button>
+                <button class="btn btn-outline-primary">Tài chính kế toán</button>
+                <button class="btn btn-outline-primary">Nhân sự và KPI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Lớp học đang theo dõi</h2>
+              <ul class="mb-0 ps-3">
+                <li>QTKD K15: mô hình quán cà phê.</li>
+                <li>Kinh tế đầu tư 3: mô hình sản xuất.</li>
+                <li>Workshop Bizprac: marketing và CRM.</li>
+                <li>Nhóm thực tập: phân tích tài chính.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 mb-3">Gợi ý cải thiện giao diện</h2>
+              <ul class="mb-0 ps-3">
+                <li>Ưu tiên nút bấm và trạng thái thay cho đoạn mô tả dài.</li>
+                <li>Dùng thẻ thao tác nhỏ cho từng nhiệm vụ mô phỏng.</li>
+                <li>Tách rõ màn hình admin và màn hình người học.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="sessionsModal" tabindex="-1" aria-labelledby="sessionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sessionsModalLabel">Chi tiết phiên đang chạy</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div id="sessionsModalSpinner" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải...</span></div>
+            <p class="mt-3 mb-0">Đang tải danh sách phiên...</p>
+          </div>
+          <div id="sessionsModalError" class="alert alert-danger d-none" role="alert"></div>
+          <div id="sessionsModalBody" class="d-none">
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Phiên</th>
+                    <th>Mô phỏng</th>
+                    <th>Scenario</th>
+                    <th>Classroom</th>
+                    <th>Trạng thái</th>
+                    <th>Bắt đầu</th>
+                  </tr>
+                </thead>
+                <tbody id="sessionsModalTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="sessionsModalEmpty" class="alert alert-secondary d-none mt-3" role="alert">
+            Không tìm thấy phiên đang chạy.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailModalLabel">Chi tiết</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div id="detailModalSpinner" class="text-center py-4 d-none">
+            <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Đang tải...</span></div>
+            <p class="mt-3 mb-0">Đang tải...</p>
+          </div>
+          <div id="detailModalError" class="alert alert-danger d-none" role="alert"></div>
+          <div id="detailModalBody">
+            <p id="detailModalDescription" class="small text-secondary"></p>
+            <ul id="detailModalList" class="list-group list-group-flush"></ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title" id="inventoryModalLabel">Quản lý mục tồn kho</h5>
+            <p class="mb-0 small text-secondary">Xem, thêm, sửa hoặc xóa các mục tồn kho kết nối SQL.</p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between align-items-center mb-3 gap-2">
+            <button id="inventoryNewBtn" type="button" class="btn btn-primary btn-sm">Thêm mục mới</button>
+            <div id="inventoryModalStatus" class="text-secondary small"></div>
+          </div>
+          <div id="inventoryTableContainer" class="table-responsive mb-4">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Mã</th>
+                  <th>Tên mục</th>
+                  <th>Đơn vị</th>
+                  <th>Tồn</th>
+                  <th>Tối thiểu</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody"></tbody>
+            </table>
+          </div>
+          <div id="inventoryFormContainer" class="border rounded p-3 d-none">
+            <h6 id="inventoryFormTitle">Thêm mục tồn kho</h6>
+            <form id="inventoryForm">
+              <input type="hidden" id="inventoryItemId" value="">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="inventoryItemCode" class="form-label">Mã mục</label>
+                  <input type="text" id="inventoryItemCode" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="inventoryItemName" class="form-label">Tên mục</label>
+                  <input type="text" id="inventoryItemName" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryItemType" class="form-label">Loại</label>
+                  <select id="inventoryItemType" class="form-select" required>
+                    <option value="raw_material">Nguyên liệu thô</option>
+                    <option value="ingredient">Nguyên liệu</option>
+                    <option value="packaging">Bao bì</option>
+                    <option value="finished_good">Thành phẩm</option>
+                    <option value="tool">Dụng cụ</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryItemUnit" class="form-label">Đơn vị</label>
+                  <input type="text" id="inventoryItemUnit" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryItemStatus" class="form-label">Trạng thái</label>
+                  <select id="inventoryItemStatus" class="form-select" required>
+                    <option value="normal">Bình thường</option>
+                    <option value="low_stock">Thiếu</option>
+                    <option value="out_of_stock">Hết</option>
+                    <option value="expired">Hết hạn</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryCurrentStock" class="form-label">Tồn hiện tại</label>
+                  <input type="number" step="0.01" id="inventoryCurrentStock" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryMinimumStock" class="form-label">Tối thiểu</label>
+                  <input type="number" step="0.01" id="inventoryMinimumStock" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryMaximumStock" class="form-label">Tối đa</label>
+                  <input type="number" step="0.01" id="inventoryMaximumStock" class="form-control">
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryUnitCost" class="form-label">Đơn giá</label>
+                  <input type="number" step="0.01" id="inventoryUnitCost" class="form-control">
+                </div>
+                <div class="col-md-4">
+                  <label for="inventoryExpiryDate" class="form-label">Hết hạn</label>
+                  <input type="date" id="inventoryExpiryDate" class="form-control">
+                </div>
+              </div>
+              <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-success btn-sm">Lưu</button>
+                <button id="inventoryCancelBtn" type="button" class="btn btn-secondary btn-sm">Hủy</button>
+              </div>
+            </form>
+          </div>
+          <div id="inventoryModalError" class="alert alert-danger d-none mt-3" role="alert"></div>
+          <div id="inventoryModalEmpty" class="alert alert-secondary d-none mt-3" role="alert">
+            Không tìm thấy mục tồn kho.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/main.js" type="module"></script>
+  <script src="./assets/js/inventory.js" type="module"></script>
+</body>
+
+</html>

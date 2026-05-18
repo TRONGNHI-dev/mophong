@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mô phỏng - Bizprac</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #667085;
+        --line: #e7eaf0;
+        --accent: #f05f3b;
+        --accent-dark: #d94e2d;
+        --navy: #101a2f;
+        --soft: #f6f8fb;
+        --green: #1f9d61;
+        --yellow: #d79513;
+        --red: #d44747;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--soft);
+      }
+      a { color: inherit; text-decoration: none; }
+      button, input, select {
+        font: inherit;
+      }
+
+      .top {
+        color: #fff;
+        background:
+          linear-gradient(90deg, rgba(13, 24, 45, .96), rgba(13, 24, 45, .72)),
+          url("https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=85")
+            center / cover;
+      }
+
+      .nav, .wrap {
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .nav {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+        font-weight: 850;
+      }
+
+      .nav-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .nav-actions a {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 14px;
+        border: 1px solid rgba(255,255,255,.24);
+        border-radius: 8px;
+        background: rgba(255,255,255,.1);
+      }
+
+      .hero {
+        padding: 54px 0 68px;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        margin: 0 0 14px;
+        padding: 7px 12px;
+        border: 1px solid rgba(255,255,255,.24);
+        border-radius: 999px;
+        background: rgba(255,255,255,.12);
+        color: rgba(255,255,255,.92);
+        font-size: 13px;
+        font-weight: 850;
+      }
+
+      h1 {
+        max-width: 820px;
+        margin: 0;
+        font-size: clamp(36px, 5.4vw, 66px);
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 740px;
+        margin: 18px 0 0;
+        color: rgba(255,255,255,.82);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 40px));
+        margin: -34px auto 72px;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px 8px 0 0;
+        background: #fff;
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tab {
+        min-height: 38px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .tab.active {
+        border-color: rgba(240, 95, 59, .42);
+        color: #fff;
+        background: var(--accent);
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 0 12px;
+        border-radius: 999px;
+        color: #216e45;
+        background: #eaf8f0;
+        font-weight: 800;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-top: 0;
+        border-radius: 0 0 8px 8px;
+        background: #fff;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric {
+        padding: 20px;
+        background: #fff;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 760;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 28px;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: 1.15fr .85fr;
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .card {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .card h2, .card h3 {
+        margin: 0 0 14px;
+        letter-spacing: 0;
+      }
+
+      .card p, .muted, li {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .items {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .item-btn {
+        min-height: 76px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f9fafc;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .item-btn strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .item-btn:hover {
+        border-color: rgba(240,95,59,.42);
+      }
+
+      .order-line, .stock-line, .task-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .order-line:last-child, .stock-line:last-child, .task-line:last-child {
+        border-bottom: 0;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .btn {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 14px;
+        border: 0;
+        border-radius: 8px;
+        color: #fff;
+        background: var(--accent);
+        font-weight: 820;
+        cursor: pointer;
+      }
+
+      .btn.secondary {
+        color: var(--ink);
+        background: #eef2f7;
+      }
+
+      .btn:hover {
+        background: var(--accent-dark);
+      }
+
+      .btn.secondary:hover {
+        background: #e3e8f0;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 760;
+      }
+
+      input, select {
+        width: 100%;
+        min-height: 42px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ink);
+      }
+
+      .progress {
+        height: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #edf1f6;
+      }
+
+      .bar {
+        height: 100%;
+        width: 50%;
+        border-radius: inherit;
+        background: var(--accent);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: #eef2f7;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 760;
+      }
+
+      .badge.good { color: #216e45; background: #eaf8f0; }
+      .badge.warn { color: #8a5c00; background: #fff6dc; }
+      .badge.bad { color: #a33b3b; background: #ffecec; }
+
+      .chart {
+        display: grid;
+        gap: 12px;
+      }
+
+      .detail-grid {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .mini-board {
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f9fafc;
+      }
+
+      .mini-board h3 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+
+      .timeline {
+        grid-column: 1 / -1;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .timeline h3 {
+        margin: 0 0 12px;
+      }
+
+      .log-line {
+        display: grid;
+        grid-template-columns: 92px 1fr;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .log-line:last-child {
+        border-bottom: 0;
+      }
+
+      .stage-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stage {
+        min-height: 88px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .stage strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .chart-row {
+        display: grid;
+        grid-template-columns: 110px 1fr 64px;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+      }
+
+      .chart-track {
+        height: 12px;
+        border-radius: 999px;
+        background: #edf1f6;
+        overflow: hidden;
+      }
+
+      .chart-fill {
+        height: 100%;
+        width: var(--value);
+        border-radius: inherit;
+        background: var(--accent);
+      }
+
+      .hidden { display: none; }
+
+      @media (max-width: 920px) {
+        .dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .workspace { grid-template-columns: 1fr; }
+        .detail-grid { grid-template-columns: 1fr; }
+        .stage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .items, .field-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 620px) {
+        .dashboard { grid-template-columns: 1fr; }
+        .stage-grid { grid-template-columns: 1fr; }
+        .nav { align-items: flex-start; padding: 18px 0; flex-direction: column; }
+        .toolbar { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <nav class="nav">
+        <a class="brand" href="index.html"><i class="bi bi-buildings"></i>Bizprac</a>
+        <div class="nav-actions">
+          <a href="simulations.html"><i class="bi bi-grid-3x3-gap"></i>Mô phỏng</a>
+          <a href="features.html"><i class="bi bi-stars"></i>Tính năng</a>
+          <a href="signin.html"><i class="bi bi-box-arrow-in-right"></i>Đăng nhập</a>
+        </div>
+      </nav>
+      <div class="wrap hero">
+        <p class="eyebrow" id="demo-eyebrow">Phiên mô phỏng</p>
+        <h1 id="demo-title">Mô phỏng Bizprac</h1>
+        <p class="lead" id="demo-lead">Trải nghiệm thao tác như một ca vận hành thật.</p>
+      </div>
+    </header>
+
+    <main class="shell">
+      <div class="toolbar">
+        <div class="tabs">
+          <button class="tab" data-model="cafe">Quán cà phê</button>
+          <button class="tab" data-model="manufacturing">Sản xuất</button>
+          <button class="tab" data-model="departments">Phòng ban</button>
+          <button class="tab" data-model="reports">Báo cáo</button>
+        </div>
+        <span class="status-pill"><i class="bi bi-broadcast"></i>Demo đang chạy</span>
+      </div>
+
+      <section class="panel">
+        <div class="dashboard" id="metrics"></div>
+        <div class="workspace" id="workspace"></div>
+      </section>
+    </main>
+
+    <script>
+      const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 });
+
+      const state = {
+        cafe: {
+          revenue: 0,
+          orders: [],
+          queue: 0,
+          satisfaction: 86,
+          staffEnergy: 92,
+          cancelled: 0,
+          logs: ["Ca sáng bắt đầu. Nhân viên kiểm tra quầy, nguyên liệu và máy POS."],
+          stock: { coffee: 18, milk: 16, tea: 14, cups: 30 },
+          menu: [
+            { id: "latte", name: "Latte", price: 45000, uses: { coffee: 1, milk: 1, cups: 1 } },
+            { id: "americano", name: "Americano", price: 35000, uses: { coffee: 1, cups: 1 } },
+            { id: "milk-tea", name: "Trà sữa", price: 39000, uses: { tea: 1, milk: 1, cups: 1 } },
+            { id: "combo", name: "Combo sáng", price: 69000, uses: { coffee: 1, milk: 1, cups: 1 } }
+          ]
+        },
+        manufacturing: {
+          plan: 120,
+          produced: 0,
+          defect: 0,
+          material: 520,
+          cost: 0,
+          product: "Bộ kit bán lẻ",
+          machine: 82,
+          warehouse: 240,
+          logs: ["Tạo lệnh sản xuất demo. Kho nguyên vật liệu đã sẵn sàng cho ca đầu tiên."]
+        },
+        departments: {
+          budget: 12000000,
+          leads: 160,
+          conversion: 12,
+          staffScore: 78,
+          channel: "Facebook Ads",
+          cash: 85000000,
+          risk: 24,
+          logs: ["Ban điều hành mở chiến dịch mô phỏng. Các phòng ban nhận chỉ tiêu trong ngày."]
+        },
+        reports: {
+          progress: 68,
+          score: 82,
+          kpi: 74,
+          teamwork: 88,
+          logs: ["Hệ thống tổng hợp kết quả phiên mô phỏng và tạo nhận xét ban đầu."]
+        }
+      };
+
+      const modelText = {
+        cafe: {
+          eyebrow: "Mô hình quán cà phê",
+          title: "Vận hành một ca bán hàng F&B.",
+          lead: "Nhận order, kiểm soát pha chế, theo dõi nguyên liệu, thu ngân và đóng ca như một cửa hàng thật."
+        },
+        manufacturing: {
+          eyebrow: "Mô hình doanh nghiệp sản xuất",
+          title: "Lập kế hoạch, sản xuất và kiểm định.",
+          lead: "Chọn sản phẩm, tính nguyên vật liệu, chạy lệnh sản xuất, kiểm soát lỗi và xem chi phí vận hành."
+        },
+        departments: {
+          eyebrow: "Mô phỏng theo phòng ban",
+          title: "Ra quyết định marketing, bán hàng, tài chính và nhân sự.",
+          lead: "Thử phân bổ ngân sách, tạo khách hàng tiềm năng, đo chuyển đổi và theo dõi KPI liên phòng ban."
+        },
+        reports: {
+          eyebrow: "Báo cáo đánh giá",
+          title: "Theo dõi tiến độ, điểm số và hiệu quả ra quyết định.",
+          lead: "Bảng đánh giá tổng hợp giúp sinh viên và giảng viên nhìn thấy kết quả sau từng phiên mô phỏng."
+        }
+      };
+
+      function getModel() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("model") || "cafe";
+      }
+
+      function setModel(model) {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set("model", model);
+        window.history.replaceState({}, "", nextUrl);
+        render(model);
+      }
+
+      function setHeader(model) {
+        const text = modelText[model];
+        document.getElementById("demo-eyebrow").textContent = text.eyebrow;
+        document.getElementById("demo-title").textContent = text.title;
+        document.getElementById("demo-lead").textContent = text.lead;
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.toggle("active", tab.dataset.model === model);
+        });
+      }
+
+      function metric(label, value, icon) {
+        return `<article class="metric"><span><i class="${icon}"></i> ${label}</span><strong>${value}</strong></article>`;
+      }
+
+      function nowLabel() {
+        return new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function addLog(model, message) {
+        state[model].logs.unshift(message);
+        state[model].logs = state[model].logs.slice(0, 6);
+      }
+
+      function renderLogs(model) {
+        const logs = state[model].logs || [];
+        return `
+          <section class="timeline">
+            <h3>Nhật ký mô phỏng</h3>
+            ${logs.map((line, index) => `
+              <div class="log-line">
+                <strong>${index === 0 ? nowLabel() : "Trước đó"}</strong>
+                <span>${line}</span>
+              </div>
+            `).join("")}
+          </section>
+        `;
+      }
+
+      function renderMetrics(model) {
+        if (model === "cafe") {
+          const s = state.cafe;
+          return [
+            metric("Doanh thu ca", money.format(s.revenue), "bi bi-cash-stack"),
+            metric("Đơn đã nhận", s.orders.length, "bi bi-receipt"),
+            metric("Đang chờ pha chế", s.queue, "bi bi-hourglass-split"),
+            metric("Hài lòng", `${s.satisfaction}%`, "bi bi-emoji-smile")
+          ].join("");
+        }
+        if (model === "manufacturing") {
+          const s = state.manufacturing;
+          return [
+            metric("Kế hoạch", `${s.plan} sp`, "bi bi-clipboard-data"),
+            metric("Đã sản xuất", `${s.produced} sp`, "bi bi-gear"),
+            metric("Lỗi QC", `${s.defect} sp`, "bi bi-exclamation-triangle"),
+            metric("Hiệu suất máy", `${s.machine}%`, "bi bi-speedometer")
+          ].join("");
+        }
+        if (model === "departments") {
+          const s = state.departments;
+          return [
+            metric("Ngân sách", money.format(s.budget), "bi bi-wallet2"),
+            metric("Leads", s.leads, "bi bi-person-plus"),
+            metric("Chuyển đổi", `${s.conversion}%`, "bi bi-funnel"),
+            metric("Tiền mặt", money.format(s.cash), "bi bi-bank")
+          ].join("");
+        }
+        const s = state.reports;
+        return [
+          metric("Tiến độ", `${s.progress}%`, "bi bi-speedometer2"),
+          metric("Điểm tổng", `${s.score}/100`, "bi bi-award"),
+          metric("KPI vận hành", `${s.kpi}%`, "bi bi-graph-up-arrow"),
+          metric("Phối hợp nhóm", `${s.teamwork}%`, "bi bi-diagram-3")
+        ].join("");
+      }
+
+      function renderCafe() {
+        const s = state.cafe;
+        const menu = s.menu.map((item) => `
+          <button class="item-btn" data-order="${item.id}">
+            <strong>${item.name}</strong>
+            <span>${money.format(item.price)}</span>
+          </button>
+        `).join("");
+        const orders = s.orders.length
+          ? s.orders.map((item) => `<div class="order-line"><span>${item.name}</span><strong>${money.format(item.price)}</strong></div>`).join("")
+          : `<p class="muted">Chưa có đơn. Chọn món để nhận order.</p>`;
+        const stock = Object.entries(s.stock).map(([key, value]) => {
+          const label = { coffee: "Cà phê", milk: "Sữa", tea: "Trà", cups: "Cốc giấy" }[key];
+          const cls = value <= 5 ? "bad" : value <= 10 ? "warn" : "good";
+          return `<div class="stock-line"><span>${label}</span><span class="badge ${cls}">${value}</span></div>`;
+        }).join("");
+
+        return `
+          <section class="card">
+            <h2>Quầy order</h2>
+            <p class="muted">Nhấn món để tạo đơn. Hệ thống tự trừ nguyên liệu và cộng doanh thu.</p>
+            <div class="items">${menu}</div>
+            <div class="actions">
+              <button class="btn" id="serve-order"><i class="bi bi-check2-circle"></i>Hoàn tất pha chế</button>
+              <button class="btn secondary" id="restock"><i class="bi bi-box-arrow-in-down"></i>Nhập nguyên liệu</button>
+            </div>
+          </section>
+          <aside class="card">
+            <h2>Phiếu ca hiện tại</h2>
+            ${orders}
+            <h3 style="margin-top:22px">Tồn kho nguyên liệu</h3>
+            ${stock}
+          </aside>
+          <section class="detail-grid">
+            <article class="mini-board">
+              <h3>Luồng phục vụ</h3>
+              <div class="stage-grid">
+                <div class="stage"><strong>1. Nhận đơn</strong><span class="badge good">${s.orders.length} đơn</span></div>
+                <div class="stage"><strong>2. Pha chế</strong><span class="badge warn">${s.queue} đang chờ</span></div>
+                <div class="stage"><strong>3. Thu ngân</strong><span class="badge good">POS ổn định</span></div>
+                <div class="stage"><strong>4. Đóng ca</strong><span class="badge">Chưa khóa</span></div>
+              </div>
+            </article>
+            <article class="mini-board">
+              <h3>Nhân sự trong ca</h3>
+              <div class="task-line"><span>Barista</span><strong>${s.staffEnergy}% năng lượng</strong></div>
+              <div class="task-line"><span>Thu ngân</span><span class="badge good">Đúng quy trình</span></div>
+              <div class="task-line"><span>Khách hủy đơn</span><strong>${s.cancelled}</strong></div>
+            </article>
+            <article class="mini-board">
+              <h3>Tình huống dịch vụ</h3>
+              <p class="muted">Mô phỏng giờ cao điểm, thiếu nguyên liệu hoặc khách phàn nàn để người học xử lý.</p>
+              <div class="actions">
+                <button class="btn secondary" id="rush-hour"><i class="bi bi-lightning"></i>Giờ cao điểm</button>
+                <button class="btn secondary" id="complaint"><i class="bi bi-chat-dots"></i>Khách phàn nàn</button>
+              </div>
+            </article>
+          </section>
+          ${renderLogs("cafe")}
+        `;
+      }
+
+      function addCafeOrder(id) {
+        const s = state.cafe;
+        const item = s.menu.find((entry) => entry.id === id);
+        const enoughStock = Object.entries(item.uses).every(([key, value]) => s.stock[key] >= value);
+        if (!enoughStock) {
+          alert("Không đủ nguyên liệu. Hãy nhập kho trước khi nhận đơn mới.");
+          return;
+        }
+        Object.entries(item.uses).forEach(([key, value]) => {
+          s.stock[key] -= value;
+        });
+        s.orders.unshift(item);
+        s.revenue += item.price;
+        s.queue += 1;
+        s.staffEnergy = Math.max(20, s.staffEnergy - 2);
+        addLog("cafe", `Nhận đơn ${item.name}. Hệ thống trừ nguyên liệu và chuyển đơn sang pha chế.`);
+        render("cafe");
+      }
+
+      function renderManufacturing() {
+        const s = state.manufacturing;
+        const percent = Math.min(100, Math.round((s.produced / s.plan) * 100));
+        return `
+          <section class="card">
+            <h2>Lệnh sản xuất</h2>
+            <div class="field-grid">
+              <label>Sản phẩm
+                <select id="product">
+                  <option ${s.product === "Bộ kit bán lẻ" ? "selected" : ""}>Bộ kit bán lẻ</option>
+                  <option ${s.product === "Hộp cà phê đóng gói" ? "selected" : ""}>Hộp cà phê đóng gói</option>
+                  <option ${s.product === "Lô hàng thương mại điện tử" ? "selected" : ""}>Lô hàng thương mại điện tử</option>
+                </select>
+              </label>
+              <label>Số lượng kế hoạch
+                <input id="plan" type="number" min="10" step="10" value="${s.plan}" />
+              </label>
+            </div>
+            <div class="actions">
+              <button class="btn" id="run-production"><i class="bi bi-play-circle"></i>Chạy 1 ca sản xuất</button>
+              <button class="btn secondary" id="buy-material"><i class="bi bi-truck"></i>Mua nguyên vật liệu</button>
+            </div>
+            <h3 style="margin-top:24px">Tiến độ sản xuất</h3>
+            <div class="progress"><div class="bar" style="width:${percent}%"></div></div>
+            <p class="muted">${percent}% kế hoạch đã hoàn thành. Mỗi ca tiêu hao nguyên vật liệu và phát sinh chi phí vận hành.</p>
+          </section>
+          <aside class="card">
+            <h2>Kiểm soát vận hành</h2>
+            <div class="task-line"><span>Nguyên vật liệu</span><strong>${s.material} đơn vị</strong></div>
+            <div class="task-line"><span>Tồn kho thành phẩm</span><strong>${s.warehouse} sp</strong></div>
+            <div class="task-line"><span>Tỷ lệ lỗi hiện tại</span><strong>${s.produced ? Math.round((s.defect / s.produced) * 100) : 0}%</strong></div>
+            <div class="task-line"><span>Thành phẩm đạt chuẩn</span><strong>${Math.max(0, s.produced - s.defect)} sp</strong></div>
+            <div class="task-line"><span>Trạng thái</span><span class="badge ${percent >= 80 ? "good" : "warn"}">${percent >= 80 ? "Gần hoàn tất" : "Đang sản xuất"}</span></div>
+          </aside>
+          <section class="detail-grid">
+            <article class="mini-board">
+              <h3>Quy trình phân xưởng</h3>
+              <div class="stage-grid">
+                <div class="stage"><strong>Chuẩn bị</strong><span class="badge good">BOM sẵn sàng</span></div>
+                <div class="stage"><strong>Sản xuất</strong><span class="badge warn">${s.produced} sp</span></div>
+                <div class="stage"><strong>QC</strong><span class="badge ${s.defect > 12 ? "bad" : "good"}">${s.defect} lỗi</span></div>
+                <div class="stage"><strong>Nhập kho</strong><span class="badge">${s.warehouse} sp</span></div>
+              </div>
+            </article>
+            <article class="mini-board">
+              <h3>Định mức vật tư</h3>
+              <div class="task-line"><span>Vật tư / sản phẩm</span><strong>2 đơn vị</strong></div>
+              <div class="task-line"><span>Chi phí / sản phẩm</span><strong>${money.format(32000)}</strong></div>
+              <div class="task-line"><span>Hiệu suất máy</span><strong>${s.machine}%</strong></div>
+            </article>
+            <article class="mini-board">
+              <h3>Tình huống rủi ro</h3>
+              <p class="muted">Chạy sự cố để thấy tác động đến tiến độ, chi phí và chất lượng.</p>
+              <div class="actions">
+                <button class="btn secondary" id="machine-issue"><i class="bi bi-exclamation-triangle"></i>Máy lỗi</button>
+                <button class="btn secondary" id="quality-check"><i class="bi bi-shield-check"></i>Siết QC</button>
+              </div>
+            </article>
+          </section>
+          ${renderLogs("manufacturing")}
+        `;
+      }
+
+      function renderDepartments() {
+        const s = state.departments;
+        const expectedSales = Math.round(s.leads * s.conversion / 100);
+        const cpl = Math.round(s.budget / Math.max(1, s.leads));
+        return `
+          <section class="card">
+            <h2>Phòng marketing và bán hàng</h2>
+            <div class="field-grid">
+              <label>Kênh chiến dịch
+                <select id="channel">
+                  <option ${s.channel === "Facebook Ads" ? "selected" : ""}>Facebook Ads</option>
+                  <option ${s.channel === "TikTok" ? "selected" : ""}>TikTok</option>
+                  <option ${s.channel === "Workshop trường học" ? "selected" : ""}>Workshop trường học</option>
+                </select>
+              </label>
+              <label>Ngân sách chiến dịch
+                <input id="budget" type="number" min="1000000" step="1000000" value="${s.budget}" />
+              </label>
+            </div>
+            <div class="actions">
+              <button class="btn" id="run-campaign"><i class="bi bi-megaphone"></i>Chạy chiến dịch</button>
+              <button class="btn secondary" id="train-staff"><i class="bi bi-person-check"></i>Đào tạo nhân sự</button>
+            </div>
+            <h3 style="margin-top:24px">Phễu bán hàng</h3>
+            <div class="chart">
+              <div class="chart-row"><span>Tiếp cận</span><div class="chart-track"><div class="chart-fill" style="--value:92%"></div></div><strong>92%</strong></div>
+              <div class="chart-row"><span>Leads</span><div class="chart-track"><div class="chart-fill" style="--value:68%"></div></div><strong>${s.leads}</strong></div>
+              <div class="chart-row"><span>Chốt đơn</span><div class="chart-track"><div class="chart-fill" style="--value:${s.conversion * 4}%"></div></div><strong>${expectedSales}</strong></div>
+            </div>
+          </section>
+          <aside class="card">
+            <h2>Liên kết phòng ban</h2>
+            <div class="task-line"><span>Chi phí / lead</span><strong>${money.format(cpl)}</strong></div>
+            <div class="task-line"><span>Chuyển đổi CRM</span><strong>${s.conversion}%</strong></div>
+            <div class="task-line"><span>KPI nhân sự</span><strong>${s.staffScore}/100</strong></div>
+            <div class="task-line"><span>Rủi ro chiến dịch</span><strong>${s.risk}%</strong></div>
+            <div class="task-line"><span>Gợi ý</span><span class="badge warn">Tăng chăm sóc khách hàng</span></div>
+          </aside>
+          <section class="detail-grid">
+            <article class="mini-board">
+              <h3>Phòng marketing</h3>
+              <p class="muted">Thiết lập chiến dịch, đo CPC/ROI và tối ưu thông điệp theo hành vi khách hàng.</p>
+              <div class="task-line"><span>Kênh chính</span><strong>${s.channel}</strong></div>
+              <div class="task-line"><span>ROI dự báo</span><strong>${Math.max(80, s.conversion * 18)}%</strong></div>
+            </article>
+            <article class="mini-board">
+              <h3>Phòng bán hàng</h3>
+              <p class="muted">Quản lý khách hàng tiềm năng, chăm sóc lại và tăng tỷ lệ chốt đơn.</p>
+              <div class="task-line"><span>Pipeline</span><strong>${Math.round(s.leads * .42)} khách</strong></div>
+              <div class="task-line"><span>Dự kiến chốt</span><strong>${Math.round(s.leads * s.conversion / 100)} đơn</strong></div>
+            </article>
+            <article class="mini-board">
+              <h3>Tài chính - nhân sự</h3>
+              <p class="muted">Theo dõi tiền mặt, hiệu suất nhân sự và rủi ro khi tăng ngân sách.</p>
+              <div class="actions">
+                <button class="btn secondary" id="cut-cost"><i class="bi bi-scissors"></i>Tối ưu chi phí</button>
+                <button class="btn secondary" id="strategy-meeting"><i class="bi bi-diagram-3"></i>Họp chiến lược</button>
+              </div>
+            </article>
+          </section>
+          ${renderLogs("departments")}
+        `;
+      }
+
+      function renderReports() {
+        const s = state.reports;
+        return `
+          <section class="card">
+            <h2>Bảng đánh giá phiên mô phỏng</h2>
+            <div class="chart">
+              <div class="chart-row"><span>Tiến độ</span><div class="chart-track"><div class="chart-fill" style="--value:${s.progress}%"></div></div><strong>${s.progress}%</strong></div>
+              <div class="chart-row"><span>Điểm số</span><div class="chart-track"><div class="chart-fill" style="--value:${s.score}%"></div></div><strong>${s.score}</strong></div>
+              <div class="chart-row"><span>KPI</span><div class="chart-track"><div class="chart-fill" style="--value:${s.kpi}%"></div></div><strong>${s.kpi}%</strong></div>
+              <div class="chart-row"><span>Nhóm</span><div class="chart-track"><div class="chart-fill" style="--value:${s.teamwork}%"></div></div><strong>${s.teamwork}%</strong></div>
+            </div>
+            <div class="actions">
+              <button class="btn" id="improve-score"><i class="bi bi-arrow-up-circle"></i>Nộp quyết định tốt hơn</button>
+              <button class="btn secondary" id="reset-report"><i class="bi bi-arrow-counterclockwise"></i>Tạo phiên mới</button>
+            </div>
+          </section>
+          <aside class="card">
+            <h2>Nhận xét tự động</h2>
+            <div class="task-line"><span>Điểm mạnh</span><span class="badge good">Phối hợp nhóm tốt</span></div>
+            <div class="task-line"><span>Cần cải thiện</span><span class="badge warn">Kiểm soát chi phí</span></div>
+            <div class="task-line"><span>Rủi ro</span><span class="badge bad">Tồn kho biến động</span></div>
+            <p class="muted">Hệ thống đề xuất xem lại quyết định về ngân sách, định mức tồn kho và thời gian xử lý đơn.</p>
+          </aside>
+          <section class="detail-grid">
+            <article class="mini-board">
+              <h3>Năng lực cá nhân</h3>
+              <div class="task-line"><span>Ra quyết định</span><strong>${s.score}/100</strong></div>
+              <div class="task-line"><span>Phân tích dữ liệu</span><strong>${Math.min(100, s.kpi + 8)}/100</strong></div>
+              <div class="task-line"><span>Xử lý tình huống</span><strong>${Math.max(45, s.score - 7)}/100</strong></div>
+            </article>
+            <article class="mini-board">
+              <h3>Bảng xếp hạng lớp</h3>
+              <div class="task-line"><span>Nhóm A</span><span class="badge good">91 điểm</span></div>
+              <div class="task-line"><span>Nhóm B</span><span class="badge warn">${s.score} điểm</span></div>
+              <div class="task-line"><span>Nhóm C</span><span class="badge">76 điểm</span></div>
+            </article>
+            <article class="mini-board">
+              <h3>Gợi ý học tiếp</h3>
+              <ul>
+                <li>Ôn lại định mức tồn kho và điểm đặt hàng lại.</li>
+                <li>So sánh ROI giữa kênh online và workshop.</li>
+                <li>Phân vai rõ hơn giữa vận hành và tài chính.</li>
+              </ul>
+            </article>
+          </section>
+          ${renderLogs("reports")}
+        `;
+      }
+
+      function bindActions(model) {
+        if (model === "cafe") {
+          document.querySelectorAll("[data-order]").forEach((button) => {
+            button.addEventListener("click", () => addCafeOrder(button.dataset.order));
+          });
+          document.getElementById("serve-order")?.addEventListener("click", () => {
+            state.cafe.queue = Math.max(0, state.cafe.queue - 1);
+            state.cafe.satisfaction = Math.min(100, state.cafe.satisfaction + 1);
+            addLog("cafe", "Hoàn tất một món pha chế. Khách nhận đồ đúng quy trình và điểm hài lòng tăng nhẹ.");
+            render("cafe");
+          });
+          document.getElementById("restock")?.addEventListener("click", () => {
+            Object.keys(state.cafe.stock).forEach((key) => state.cafe.stock[key] += 8);
+            addLog("cafe", "Nhập thêm nguyên liệu. Tồn kho quầy pha chế được bổ sung để tránh gián đoạn dịch vụ.");
+            render("cafe");
+          });
+          document.getElementById("rush-hour")?.addEventListener("click", () => {
+            state.cafe.queue += 4;
+            state.cafe.staffEnergy = Math.max(20, state.cafe.staffEnergy - 10);
+            state.cafe.satisfaction = Math.max(30, state.cafe.satisfaction - 5);
+            addLog("cafe", "Giờ cao điểm xuất hiện. Hàng chờ tăng, nhân sự giảm năng lượng và cần ưu tiên xử lý nhanh.");
+            render("cafe");
+          });
+          document.getElementById("complaint")?.addEventListener("click", () => {
+            state.cafe.cancelled += 1;
+            state.cafe.satisfaction = Math.max(20, state.cafe.satisfaction - 8);
+            addLog("cafe", "Khách phàn nàn vì chờ lâu. Người học cần xử lý bồi hoàn hoặc ưu tiên phục vụ.");
+            render("cafe");
+          });
+        }
+        if (model === "manufacturing") {
+          document.getElementById("run-production")?.addEventListener("click", () => {
+            const s = state.manufacturing;
+            s.plan = Number(document.getElementById("plan").value || s.plan);
+            s.product = document.getElementById("product").value;
+            const batch = Math.min(30, Math.max(0, s.plan - s.produced));
+            if (s.material < batch * 2) {
+              alert("Không đủ nguyên vật liệu cho ca sản xuất này.");
+              return;
+            }
+            s.material -= batch * 2;
+            s.produced += batch;
+            s.defect += Math.round(batch * 0.06);
+            s.cost += batch * 32000;
+            s.warehouse += Math.max(0, batch - Math.round(batch * 0.06));
+            s.machine = Math.max(45, s.machine - 2);
+            addLog("manufacturing", `Chạy một ca sản xuất ${batch} sản phẩm. Hệ thống cập nhật vật tư, QC, chi phí và kho thành phẩm.`);
+            render("manufacturing");
+          });
+          document.getElementById("buy-material")?.addEventListener("click", () => {
+            state.manufacturing.material += 160;
+            state.manufacturing.cost += 2400000;
+            addLog("manufacturing", "Mua thêm nguyên vật liệu từ nhà cung cấp. Chi phí tăng nhưng giảm nguy cơ thiếu hàng.");
+            render("manufacturing");
+          });
+          document.getElementById("machine-issue")?.addEventListener("click", () => {
+            state.manufacturing.machine = Math.max(30, state.manufacturing.machine - 14);
+            state.manufacturing.defect += 5;
+            state.manufacturing.cost += 900000;
+            addLog("manufacturing", "Máy sản xuất phát sinh lỗi. Tỷ lệ hàng lỗi và chi phí bảo trì tăng.");
+            render("manufacturing");
+          });
+          document.getElementById("quality-check")?.addEventListener("click", () => {
+            state.manufacturing.defect = Math.max(0, state.manufacturing.defect - 4);
+            state.manufacturing.cost += 500000;
+            addLog("manufacturing", "Siết quy trình QC. Lỗi giảm nhưng chi phí kiểm định tăng.");
+            render("manufacturing");
+          });
+        }
+        if (model === "departments") {
+          document.getElementById("run-campaign")?.addEventListener("click", () => {
+            const s = state.departments;
+            s.budget = Number(document.getElementById("budget").value || s.budget);
+            s.channel = document.getElementById("channel").value;
+            const channelBoost = s.channel === "Workshop trường học" ? 36 : s.channel === "TikTok" ? 28 : 22;
+            s.leads += channelBoost;
+            s.conversion = Math.min(28, s.conversion + 1);
+            s.cash = Math.max(0, s.cash - Math.round(s.budget * .12));
+            s.risk = Math.min(80, s.risk + 3);
+            addLog("departments", `Chạy chiến dịch ${s.channel}. Leads tăng, ngân sách giảm và rủi ro chiến dịch được cập nhật.`);
+            render("departments");
+          });
+          document.getElementById("train-staff")?.addEventListener("click", () => {
+            state.departments.staffScore = Math.min(100, state.departments.staffScore + 5);
+            state.departments.conversion = Math.min(30, state.departments.conversion + 2);
+            state.departments.cash = Math.max(0, state.departments.cash - 1800000);
+            addLog("departments", "Đào tạo nhân sự bán hàng. KPI và tỷ lệ chuyển đổi tăng, nhưng phát sinh chi phí đào tạo.");
+            render("departments");
+          });
+          document.getElementById("cut-cost")?.addEventListener("click", () => {
+            state.departments.cash += 4200000;
+            state.departments.risk = Math.max(5, state.departments.risk - 4);
+            addLog("departments", "Tối ưu chi phí vận hành. Dòng tiền cải thiện và rủi ro ngân sách giảm.");
+            render("departments");
+          });
+          document.getElementById("strategy-meeting")?.addEventListener("click", () => {
+            state.departments.conversion = Math.min(32, state.departments.conversion + 1);
+            state.departments.staffScore = Math.min(100, state.departments.staffScore + 3);
+            state.departments.risk = Math.max(5, state.departments.risk - 2);
+            addLog("departments", "Họp chiến lược liên phòng ban. Đội ngũ thống nhất mục tiêu và cải thiện chuyển đổi.");
+            render("departments");
+          });
+        }
+        if (model === "reports") {
+          document.getElementById("improve-score")?.addEventListener("click", () => {
+            const s = state.reports;
+            s.progress = Math.min(100, s.progress + 6);
+            s.score = Math.min(100, s.score + 4);
+            s.kpi = Math.min(100, s.kpi + 5);
+            s.teamwork = Math.min(100, s.teamwork + 2);
+            addLog("reports", "Người học nộp quyết định cải thiện. Điểm tổng, KPI và phối hợp nhóm tăng.");
+            render("reports");
+          });
+          document.getElementById("reset-report")?.addEventListener("click", () => {
+            state.reports = {
+              progress: 12,
+              score: 55,
+              kpi: 48,
+              teamwork: 60,
+              logs: ["Tạo phiên đánh giá mới. Hệ thống đặt lại chỉ số để bắt đầu vòng mô phỏng tiếp theo."]
+            };
+            render("reports");
+          });
+        }
+      }
+
+      function render(model) {
+        setHeader(model);
+        document.getElementById("metrics").innerHTML = renderMetrics(model);
+        const workspace = document.getElementById("workspace");
+        if (model === "cafe") workspace.innerHTML = renderCafe();
+        if (model === "manufacturing") workspace.innerHTML = renderManufacturing();
+        if (model === "departments") workspace.innerHTML = renderDepartments();
+        if (model === "reports") workspace.innerHTML = renderReports();
+        bindActions(model);
+      }
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => setModel(tab.dataset.model));
+      });
+
+      render(getModel());
+    </script>
+  </body>
+</html>
