@@ -215,29 +215,36 @@
         line-height: 1.55;
       }
 
-      .items {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .order-type-group {
+        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
+        margin: 0 0 14px;
       }
 
-      .item-btn {
-        min-height: 76px;
-        padding: 12px;
+      .order-type-chip {
+        min-height: 40px;
+        padding: 0 14px;
         border: 1px solid var(--line);
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        background: #fff;
+        color: var(--muted);
+        font-weight: 760;
+      }
+
+      .incoming-order {
+        padding: 18px;
+        border: 1px solid rgba(240,95,59,.28);
         border-radius: 8px;
-        background: #f9fafc;
-        text-align: left;
-        cursor: pointer;
+        background: #fff8f5;
       }
 
-      .item-btn strong {
+      .incoming-order strong {
         display: block;
-        margin-bottom: 5px;
-      }
-
-      .item-btn:hover {
-        border-color: rgba(240,95,59,.42);
+        margin-bottom: 6px;
+        font-size: 24px;
       }
 
       .order-line, .stock-line, .task-line {
@@ -340,6 +347,7 @@
       .badge.good { color: #216e45; background: #eaf8f0; }
       .badge.warn { color: #8a5c00; background: #fff6dc; }
       .badge.bad { color: #a33b3b; background: #ffecec; }
+      .badge.info { color: #1d4ed8; background: #e8f0ff; }
 
       .chart {
         display: grid;
@@ -612,8 +620,8 @@
           const s = state.cafe;
           return [
             metric("Doanh thu ca", money.format(s.revenue), "bi bi-cash-stack"),
-            metric("Đơn đã nhận", s.orders.length, "bi bi-receipt"),
-            metric("Đang chờ pha chế", s.queue, "bi bi-hourglass-split"),
+            metric("Đơn đã hoàn thành", s.completedOrders?.length || 0, "bi bi-check2-circle"),
+            metric("Đang chờ pha chế", s.orders.length, "bi bi-hourglass-split"),
             metric("Hài lòng", `${s.satisfaction}%`, "bi bi-emoji-smile")
           ].join("");
         }
@@ -646,15 +654,43 @@
 
       function renderCafe() {
         const s = state.cafe;
-        const menu = s.menu.map((item) => `
-          <button class="item-btn" data-order="${item.id}">
-            <strong>${item.name}</strong>
-            <span>${money.format(item.price)}</span>
-          </button>
-        `).join("");
+        const orderTypes = [
+          { id: "dine-in", label: "Uống tại chỗ" },
+          { id: "takeaway", label: "Mang về" },
+          { id: "delivery", label: "Ship" }
+        ];
+        const incomingOrder = s.nextOrder || createIncomingCafeOrderPreview();
         const orders = s.orders.length
-          ? s.orders.map((item) => `<div class="order-line"><span>${item.name}</span><strong>${money.format(item.price)}</strong></div>`).join("")
+          ? s.orders.map((item) => {
+              const isLate = isOrderLate(item);
+              return `<div class="order-line ${isLate ? "late-order" : ""}">
+                <span>
+                  <span>${item.discountPercent ? `Giảm ${item.discountPercent}% - ` : ""}${item.name}</span>
+                  <small style="display:block;margin-top:4px;color:#667085;font-weight:700;">${item.orderTypeLabel || "Uống tại chỗ"}</small>
+                  <span class="badge ${item.delayAccepted ? "info" : "warn"}" style="margin-top:6px;">${item.delayAccepted ? "Chờ thêm" : "Đang pha chế"}</span>
+                  <small data-order-wait data-created-at="${item.createdAt || Date.now()}" data-wait-minutes="${item.waitMinutes || 10}" data-delay-accepted="${item.delayAccepted ? "true" : "false"}" style="display:block;margin-top:4px;color:${item.delayAccepted ? "#2563eb" : isLate ? "#dc2626" : "#d97706"};font-weight:800;">Thời gian chờ: ${getOrderWaitTime(item)}</small>
+                  ${item.delayAccepted ? `<span style="display:block;margin-top:6px;color:#2563eb;font-size:.86rem;font-weight:800;">Khách đồng ý đợi thêm và được giảm giá 10%.</span>` : ""}
+                  <span data-late-actions style="display:${isLate && !item.delayAccepted ? "block" : "none"};">
+                    <span style="display:block;margin-top:6px;color:#dc2626;font-size:.86rem;font-weight:800;">Chậm đơn: cần báo khách và xử lý ngay.</span>
+                    <span style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+                    <button class="btn" data-discount-order="${item.queueId}">Đợi thêm, giảm giá 10%</button>
+                    <button class="btn" data-cancel-order="${item.queueId}">Hủy đơn, tặng voucher</button>
+                    </span>
+                  </span>
+                  <span style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+                    <button class="btn" type="button" data-complete-order="${item.queueId}">Hoàn thành đơn này</button>
+                  </span>
+                </span>
+                <strong>${money.format(item.discountPercent ? Math.round(item.price * (100 - item.discountPercent) / 100) : item.price)}</strong>
+              </div>`;
+            }).join("")
           : `<p class="muted">Chưa có đơn. Chọn món để nhận order.</p>`;
+        const completedOrders = s.completedOrders?.length
+          ? `<div style="margin-top:18px;"><h3 style="font-size:1rem;margin:0 0 8px;">Đơn đã hoàn thành</h3>${s.completedOrders.map((item) => `<div class="order-line"><span><span>${item.name}</span><small style="display:block;margin-top:4px;color:#667085;font-weight:700;">${item.orderTypeLabel || "Uống tại chỗ"}</small><span class="badge good" style="margin-top:6px;">Đã hoàn thành</span><small style="display:block;margin-top:6px;color:#16a34a;font-weight:800;">Đã hoàn thành sau ${item.completedText}</small></span><strong>${money.format(item.finalPrice || item.price)}</strong></div>`).join("")}</div>`
+          : "";
+        const cancelledOrders = s.cancelledOrders?.length
+          ? `<div style="margin-top:18px;"><h3 style="font-size:1rem;margin:0 0 8px;">Đơn bị hủy</h3>${s.cancelledOrders.map((item) => `<div class="order-line"><span><span>${item.name}</span><small style="display:block;margin-top:4px;color:#dc2626;font-weight:800;">Đã hủy do chậm đơn - tặng voucher xin lỗi</small></span><strong>Voucher</strong></div>`).join("")}</div>`
+          : "";
         const stock = Object.entries(s.stock).map(([key, value]) => {
           const label = { coffee: "Cà phê", milk: "Sữa", tea: "Trà", cups: "Cốc giấy" }[key];
           const cls = value <= 5 ? "bad" : value <= 10 ? "warn" : "good";
@@ -664,9 +700,21 @@
         return `
           <section class="card">
             <h2>Quầy order</h2>
-            <p class="muted">Nhấn món để tạo đơn. Hệ thống tự trừ nguyên liệu và cộng doanh thu.</p>
-            <div class="items">${menu}</div>
+            <p class="muted">Đơn mới sẽ tự hiện gồm tên món và loại đơn. Chỉ cần nhấn nhận đơn để đưa vào hàng chờ.</p>
+            <div class="order-type-group">
+              ${orderTypes.map((type) => `
+                <span class="order-type-chip">
+                  ${type.label}
+                </span>
+              `).join("")}
+            </div>
+            <div class="incoming-order">
+              <strong>${incomingOrder.name}</strong>
+              <span style="display:block;font-size:1.1rem;margin-bottom:8px;">${money.format(incomingOrder.price)}</span>
+              <span class="badge info">${incomingOrder.orderTypeLabel}</span>
+            </div>
             <div class="actions">
+              <button class="btn" id="accept-order"><i class="bi bi-bag-check"></i>Nhận đơn</button>
               <button class="btn" id="serve-order"><i class="bi bi-check2-circle"></i>Hoàn tất pha chế</button>
               <button class="btn secondary" id="restock"><i class="bi bi-box-arrow-in-down"></i>Nhập nguyên liệu</button>
             </div>
@@ -674,6 +722,8 @@
           <aside class="card">
             <h2>Phiếu ca hiện tại</h2>
             ${orders}
+            ${completedOrders}
+            ${cancelledOrders}
             <h3 style="margin-top:22px">Tồn kho nguyên liệu</h3>
             ${stock}
           </aside>
@@ -706,9 +756,162 @@
         `;
       }
 
-      function addCafeOrder(id) {
+      function getOrderWaitTime(item) {
+        if (!item.createdAt) return "8-12 phút";
+
+        const waitedMinutes = Math.max(0, Math.floor((Date.now() - item.createdAt) / 60000));
+        const remainingMinutes = Math.max(0, (item.waitMinutes || 10) - waitedMinutes);
+
+        if (item.delayAccepted) return `khách đợi thêm, đã chờ ${waitedMinutes} phút`;
+        if (remainingMinutes === 0) return `đã chờ ${waitedMinutes} phút - chậm đơn`;
+        return `đã chờ ${waitedMinutes} phút, còn khoảng ${remainingMinutes} phút`;
+      }
+
+      function isOrderLate(item) {
+        if (!item.createdAt) return false;
+        return Date.now() - item.createdAt >= (item.waitMinutes || 10) * 60000;
+      }
+
+      function formatOrderWaitTime(createdAt, waitMinutes) {
+        const totalSeconds = Math.max(0, Math.floor((Date.now() - createdAt) / 1000));
+        const waitedMinutes = Math.floor(totalSeconds / 60);
+        const waitedSeconds = totalSeconds % 60;
+        const remainingSeconds = Math.max(0, waitMinutes * 60 - totalSeconds);
+        const remainingMinutes = Math.floor(remainingSeconds / 60);
+        const remainingRestSeconds = remainingSeconds % 60;
+
+        if (remainingSeconds === 0) {
+          return `Thời gian chờ: đã chờ ${waitedMinutes} phút ${waitedSeconds} giây - chậm đơn`;
+        }
+
+        return `Thời gian chờ: đã chờ ${waitedMinutes} phút ${waitedSeconds} giây, còn khoảng ${remainingMinutes} phút ${remainingRestSeconds} giây`;
+      }
+
+      function formatAcceptedDelayTime(createdAt) {
+        const totalSeconds = Math.max(0, Math.floor((Date.now() - createdAt) / 1000));
+        const waitedMinutes = Math.floor(totalSeconds / 60);
+        const waitedSeconds = totalSeconds % 60;
+        return `Thời gian chờ: khách đợi thêm, đã chờ ${waitedMinutes} phút ${waitedSeconds} giây`;
+      }
+
+      function formatCompletedWaitTime(createdAt) {
+        const totalSeconds = Math.max(0, Math.floor((Date.now() - createdAt) / 1000));
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes} phút ${seconds} giây`;
+      }
+
+      function updateOrderWaitTimes() {
+        let needsRender = false;
+
+        document.querySelectorAll("[data-order-wait]").forEach((element) => {
+          const createdAt = Number(element.dataset.createdAt);
+          const waitMinutes = Number(element.dataset.waitMinutes || 10);
+          const delayAccepted = element.dataset.delayAccepted === "true";
+
+          if (!createdAt) return;
+          element.textContent = delayAccepted ? formatAcceptedDelayTime(createdAt) : formatOrderWaitTime(createdAt, waitMinutes);
+
+          if (!delayAccepted && Date.now() - createdAt >= waitMinutes * 60000) {
+            const orderLine = element.closest(".order-line");
+            const lateActions = orderLine?.querySelector("[data-late-actions]");
+
+            element.style.color = "#dc2626";
+            orderLine?.classList.add("late-order");
+            if (lateActions) lateActions.style.display = "block";
+
+            if (!orderLine) needsRender = true;
+          }
+        });
+
+        if (needsRender) render("cafe");
+      }
+
+      setInterval(updateOrderWaitTimes, 1000);
+
+      document.addEventListener("click", (event) => {
+        const completeButton = event.target.closest("[data-complete-order]");
+        if (!completeButton) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        completeCafeOrder(completeButton.dataset.completeOrder);
+      }, true);
+
+      function discountDelayedCafeOrder(queueId) {
+        const order = state.cafe.orders.find((item) => String(item.queueId) === String(queueId));
+        if (!order) return;
+
+        order.discountPercent = 10;
+        order.delayAccepted = true;
+        order.customerUpdated = true;
+        addLog("cafe", `Báo khách đơn ${order.name} đang chậm: khách đồng ý đợi thêm đến khi pha chế xong và được giảm giá 10%.`);
+        render("cafe");
+      }
+
+      function cancelDelayedCafeOrder(queueId) {
+        const orderIndex = state.cafe.orders.findIndex((item) => String(item.queueId) === String(queueId));
+        if (orderIndex < 0) return;
+
+        const [order] = state.cafe.orders.splice(orderIndex, 1);
+        state.cafe.cancelled += 1;
+        state.cafe.cancelledOrders = state.cafe.cancelledOrders || [];
+        state.cafe.cancelledOrders.unshift({
+          ...order,
+          cancelledAt: Date.now()
+        });
+        state.cafe.queue = state.cafe.orders.length;
+        addLog("cafe", `Hủy đơn ${order.name} vì chậm phục vụ. Gửi voucher xin lỗi cho khách.`);
+        render("cafe");
+      }
+
+      function completeCafeOrder(queueId) {
+        const orderIndex = queueId
+          ? state.cafe.orders.findIndex((item) => String(item.queueId) === String(queueId))
+          : 0;
+        if (orderIndex < 0 || !state.cafe.orders[orderIndex]) {
+          addLog("cafe", "Chưa có đơn nào trong hàng chờ pha chế.");
+          render("cafe");
+          return;
+        }
+
+        const [order] = state.cafe.orders.splice(orderIndex, 1);
+        state.cafe.completedOrders = state.cafe.completedOrders || [];
+        state.cafe.completedOrders.unshift({
+          ...order,
+          completedAt: Date.now(),
+          completedText: formatCompletedWaitTime(order.createdAt),
+          finalPrice: order.discountPercent ? Math.round(order.price * (100 - order.discountPercent) / 100) : order.price
+        });
+        state.cafe.queue = state.cafe.orders.length;
+        addLog("cafe", `Hoàn tất pha chế đơn ${order.name} sau ${formatCompletedWaitTime(order.createdAt)}.`);
+        render("cafe");
+      }
+
+      window.completeCafeOrder = completeCafeOrder;
+
+      function createIncomingCafeOrderPreview() {
+        const orderTypeLabels = {
+          "dine-in": "Uống tại chỗ",
+          "takeaway": "Mang về",
+          "delivery": "Ship"
+        };
+        const orderTypeIds = Object.keys(orderTypeLabels);
+        const randomItem = state.cafe.menu[Math.floor(Math.random() * state.cafe.menu.length)];
+        const randomOrderType = orderTypeIds[Math.floor(Math.random() * orderTypeIds.length)];
+        const preview = {
+          ...randomItem,
+          orderType: randomOrderType,
+          orderTypeLabel: orderTypeLabels[randomOrderType] || "Uống tại chỗ"
+        };
+        state.cafe.nextOrder = preview;
+        return preview;
+      }
+
+      function addCafeOrder() {
         const s = state.cafe;
-        const item = s.menu.find((entry) => entry.id === id);
+        const item = s.nextOrder || createIncomingCafeOrderPreview();
         const enoughStock = Object.entries(item.uses).every(([key, value]) => s.stock[key] >= value);
         if (!enoughStock) {
           alert("Không đủ nguyên liệu. Hãy nhập kho trước khi nhận đơn mới.");
@@ -717,11 +920,17 @@
         Object.entries(item.uses).forEach(([key, value]) => {
           s.stock[key] -= value;
         });
-        s.orders.unshift(item);
+        s.orders.unshift({
+          ...item,
+          queueId: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+          createdAt: Date.now(),
+          waitMinutes: 0.5 + s.orders.length * 0.25
+        });
         s.revenue += item.price;
-        s.queue += 1;
+        s.queue = s.orders.length;
         s.staffEnergy = Math.max(20, s.staffEnergy - 2);
-        addLog("cafe", `Nhận đơn ${item.name}. Hệ thống trừ nguyên liệu và chuyển đơn sang pha chế.`);
+        addLog("cafe", `Nhận đơn ${item.name} - ${item.orderTypeLabel || "Uống tại chỗ"}. Hệ thống trừ nguyên liệu và chuyển đơn sang pha chế.`);
+        s.nextOrder = null;
         render("cafe");
       }
 
@@ -903,10 +1112,16 @@
 
       function bindActions(model) {
         if (model === "cafe") {
-          document.querySelectorAll("[data-order]").forEach((button) => {
-            button.addEventListener("click", () => addCafeOrder(button.dataset.order));
+          document.getElementById("accept-order")?.addEventListener("click", () => addCafeOrder());
+          document.querySelectorAll("[data-discount-order]").forEach((button) => {
+            button.addEventListener("click", () => discountDelayedCafeOrder(button.dataset.discountOrder));
+          });
+          document.querySelectorAll("[data-cancel-order]").forEach((button) => {
+            button.addEventListener("click", () => cancelDelayedCafeOrder(button.dataset.cancelOrder));
           });
           document.getElementById("serve-order")?.addEventListener("click", () => {
+            completeCafeOrder();
+            return;
             state.cafe.queue = Math.max(0, state.cafe.queue - 1);
             state.cafe.satisfaction = Math.min(100, state.cafe.satisfaction + 1);
             addLog("cafe", "Hoàn tất một món pha chế. Khách nhận đồ đúng quy trình và điểm hài lòng tăng nhẹ.");
